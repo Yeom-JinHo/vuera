@@ -208,9 +208,12 @@ var VueContainer = function (_React$Component) {
     return _this;
   }
 
+  // eslint-disable-next-line camelcase, react/sort-comp
+
+
   createClass(VueContainer, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
+    key: 'UNSAFE_componentWillReceiveProps',
+    value: function UNSAFE_componentWillReceiveProps(nextProps) {
       var component = nextProps.component,
           props = objectWithoutProperties(nextProps, ['component']);
 
