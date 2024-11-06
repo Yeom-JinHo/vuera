@@ -15,7 +15,7 @@ const shared = {
       exclude: 'node-modules/**',
     }),
   ],
-  external: ['react', 'react-dom/client', 'vue'],
+  external: ['react', 'react-dom', 'react-dom/client', 'vue'],
 }
 
 export default [
@@ -38,6 +38,7 @@ export default [
       name: 'vuera',
       globals: {
         react: 'React',
+        'react-dom': 'ReactDOM',
         'react-dom/client': 'client',
         vue: 'Vue',
       },

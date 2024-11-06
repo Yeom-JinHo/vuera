@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Vue from 'vue';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -347,11 +348,13 @@ var ReactWrapper = {
       var children = this.$slots.default !== undefined ? { children: this.$slots.default } : {};
       this.root = createRoot(this.$refs.react);
 
-      this.root.render(React.createElement(Component, _extends({}, this.$props.passedProps, this.$attrs, this.$listeners, children, {
-        ref: function ref(_ref) {
-          return _this2.reactComponentRef = _ref;
-        }
-      })));
+      ReactDOM.flushSync(function () {
+        return _this2.root.render(React.createElement(Component, _extends({}, _this2.$props.passedProps, _this2.$attrs, _this2.$listeners, children, {
+          ref: function ref(_ref) {
+            return _this2.reactComponentRef = _ref;
+          }
+        })));
+      });
     }
   },
   mounted: function mounted() {

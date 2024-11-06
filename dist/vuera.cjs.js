@@ -6,6 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var client = require('react-dom/client');
 var React = _interopDefault(require('react'));
+var ReactDOM = _interopDefault(require('react-dom'));
 var Vue = _interopDefault(require('vue'));
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -353,11 +354,13 @@ var ReactWrapper = {
       var children = this.$slots.default !== undefined ? { children: this.$slots.default } : {};
       this.root = client.createRoot(this.$refs.react);
 
-      this.root.render(React.createElement(Component, _extends({}, this.$props.passedProps, this.$attrs, this.$listeners, children, {
-        ref: function ref(_ref) {
-          return _this2.reactComponentRef = _ref;
-        }
-      })));
+      ReactDOM.flushSync(function () {
+        return _this2.root.render(React.createElement(Component, _extends({}, _this2.$props.passedProps, _this2.$attrs, _this2.$listeners, children, {
+          ref: function ref(_ref) {
+            return _this2.reactComponentRef = _ref;
+          }
+        })));
+      });
     }
   },
   mounted: function mounted() {

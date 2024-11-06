@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import React from 'react'
+import ReactDOM from 'react-dom'
 import VueWrapper from './Vue'
 
 const makeReactContainer = Component => {
@@ -52,14 +53,16 @@ export default {
       const children = this.$slots.default !== undefined ? { children: this.$slots.default } : {}
       this.root = createRoot(this.$refs.react)
 
-      this.root.render(
-        <Component
-          {...this.$props.passedProps}
-          {...this.$attrs}
-          {...this.$listeners}
-          {...children}
-          ref={ref => (this.reactComponentRef = ref)}
-        />
+      ReactDOM.flushSync(() =>
+        this.root.render(
+          <Component
+            {...this.$props.passedProps}
+            {...this.$attrs}
+            {...this.$listeners}
+            {...children}
+            ref={ref => (this.reactComponentRef = ref)}
+          />
+        )
       )
     },
   },
