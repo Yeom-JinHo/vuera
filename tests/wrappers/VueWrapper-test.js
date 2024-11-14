@@ -1,5 +1,5 @@
+import { createRoot } from 'react-dom/client'
 import React from 'react'
-import ReactDOM from 'react-dom'
 import Vue from 'vue'
 import { VueWrapper, config } from '../../src'
 import VueComponent from '../fixtures/VueComponent'
@@ -7,7 +7,9 @@ import VueInstanceOptionsComponent, { Plugin } from '../fixtures/VueInstanceOpti
 import VueRegisteredComponent from '../fixtures/VueRegisteredComponent'
 import VueSingleFileComponent from '../fixtures/VueSingleFileComponent.vue'
 
-const mockReset = () => { return jest.fn() }
+const mockReset = () => {
+  return jest.fn()
+}
 const makeReactInstanceWithVueComponent = (passedComponent, events) => {
   class ReactApp extends React.Component {
     constructor (props) {
@@ -25,11 +27,7 @@ const makeReactInstanceWithVueComponent = (passedComponent, events) => {
     render () {
       return (
         <div>
-          <input
-            type='text'
-            value={this.state.message}
-            onChange={this.onChange}
-          />
+          <input type='text' value={this.state.message} onChange={this.onChange} />
           <VueWrapper
             ref={ref => (this.vueWrapperRef = ref)}
             component={passedComponent}
@@ -41,10 +39,8 @@ const makeReactInstanceWithVueComponent = (passedComponent, events) => {
       )
     }
   }
-  const instance = ReactDOM.render(
-    <ReactApp message='Message for Vue' />,
-    document.getElementById('root')
-  )
+  const instance = createRoot(document.getElementById('root'))
+  instance.render(<ReactApp message='Message for Vue' />)
   // React 15 compat
   document.querySelectorAll('[data-reactroot]').forEach(el => {
     el.removeAttribute('data-reactroot')
@@ -139,7 +135,8 @@ describe('VueInReact', () => {
     const vm = reactAppInstance.vueWrapperRef.vueInstance
 
     expect(vm._isDestroyed).toBe(false)
-    ReactDOM.unmountComponentAtNode(document.getElementById('root'))
+    const root = createRoot(document.getElementById('root'))
+    root.unmount()
     expect(vm._isDestroyed).toBe(true)
   })
 
@@ -151,38 +148,27 @@ describe('VueInReact', () => {
     }
 
     const render = (...children) => {
-      ReactDOM.render(
-        <VueWrapper component={componentWithChildren}>{children}</VueWrapper>,
-        document.getElementById('root')
-      )
+      const root = createRoot(document.getElementById('root'))
+      root.render(<VueWrapper component={componentWithChildren}>{children}</VueWrapper>)
       // React 15 compat
       document.querySelectorAll('[data-reactroot]').forEach(el => {
         el.removeAttribute('data-reactroot')
       })
-      document.body.innerHTML = document.body.innerHTML.replace(
-        /<!--[\s\S]*?-->/g,
-        ''
-      )
+      document.body.innerHTML = document.body.innerHTML.replace(/<!--[\s\S]*?-->/g, '')
     }
 
     it('works with a string', () => {
       render('Hello')
-      expect(document.querySelector('#root div div').innerHTML).toBe(
-        '<div>Hello</div>'
-      )
+      expect(document.querySelector('#root div div').innerHTML).toBe('<div>Hello</div>')
     })
 
     it('works with a React component', () => {
       render(<div>Hello</div>)
-      expect(document.querySelector('#root div div').innerHTML).toBe(
-        '<div><div>Hello</div></div>'
-      )
+      expect(document.querySelector('#root div div').innerHTML).toBe('<div><div>Hello</div></div>')
     })
 
     it('works with a React component', () => {
-      render(
-        <VueWrapper component={componentWithChildren}>wow so nested</VueWrapper>
-      )
+      render(<VueWrapper component={componentWithChildren}>wow so nested</VueWrapper>)
       expect(document.querySelector('#root div div').innerHTML).toBe(
         '<div><div><div><div>wow so nested</div></div></div></div>'
       )

@@ -1,4 +1,4 @@
-var vuera = (function (exports,React,ReactDOM,Vue) {
+var vuera = (function (exports,client,React,ReactDOM,Vue) {
 'use strict';
 
 React = React && React.hasOwnProperty('default') ? React['default'] : React;
@@ -208,9 +208,12 @@ var VueContainer = function (_React$Component) {
     return _this;
   }
 
+  // eslint-disable-next-line camelcase, react/sort-comp
+
+
   createClass(VueContainer, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
+    key: 'UNSAFE_componentWillReceiveProps',
+    value: function UNSAFE_componentWillReceiveProps(nextProps) {
       var component = nextProps.component,
           props = objectWithoutProperties(nextProps, ['component']);
 
@@ -348,18 +351,22 @@ var ReactWrapper = {
 
       var Component = makeReactContainer(component);
       var children = this.$slots.default !== undefined ? { children: this.$slots.default } : {};
-      ReactDOM.render(React.createElement(Component, _extends({}, this.$props.passedProps, this.$attrs, this.$listeners, children, {
-        ref: function ref(_ref) {
-          return _this2.reactComponentRef = _ref;
-        }
-      })), this.$refs.react);
+      this.root = client.createRoot(this.$refs.react);
+
+      ReactDOM.flushSync(function () {
+        return _this2.root.render(React.createElement(Component, _extends({}, _this2.$props.passedProps, _this2.$attrs, _this2.$listeners, children, {
+          ref: function ref(_ref) {
+            return _this2.reactComponentRef = _ref;
+          }
+        })));
+      });
     }
   },
   mounted: function mounted() {
     this.mountReactComponent(this.$props.component);
   },
   beforeDestroy: function beforeDestroy() {
-    ReactDOM.unmountComponentAtNode(this.$refs.react);
+    this.root.unmount();
   },
   updated: function updated() {
     /**
@@ -496,4 +503,4 @@ exports.config = config;
 
 return exports;
 
-}({},React,ReactDOM,Vue));
+}({},client,React,ReactDOM,Vue));

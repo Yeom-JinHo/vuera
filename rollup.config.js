@@ -15,7 +15,7 @@ const shared = {
       exclude: 'node-modules/**',
     }),
   ],
-  external: ['react', 'react-dom', 'vue'],
+  external: ['react', 'react-dom', 'react-dom/client', 'vue'],
 }
 
 export default [
@@ -39,6 +39,7 @@ export default [
       globals: {
         react: 'React',
         'react-dom': 'ReactDOM',
+        'react-dom/client': 'client',
         vue: 'Vue',
       },
     },
